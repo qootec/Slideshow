@@ -1,0 +1,2 @@
+-i https://pypi.org/simple
+pillow==9.2.0
