@@ -124,8 +124,16 @@ class MySlideShow(tk.Toplevel):
         img_w, img_h = image.size
         # scr_w, scr_h = self.winfo_screenwidth(), self.winfo_screenheight()
         scr_w, scr_h = 1920, 1080
-        width, height = min(scr_w, img_w), min(scr_h, img_h)
-        image.thumbnail((width, height), Image.ANTIALIAS)
+        wFactor = scr_w / img_w
+        hFactor = scr_h / img_h
+        factor = min(wFactor, hFactor)
+
+        width = int(img_w * factor)
+        height = int(img_h * factor)
+        image = image.resize((width,height))
+
+        # width, height = min(scr_w, img_w), min(scr_h, img_h)
+        # image.thumbnail((width, height), Image.ANTIALIAS)
 
         #set window size after scaling the original image up/down to fit screen
         #removes the border on the image
