@@ -6,18 +6,21 @@ import sys
 import os
 import re
 
+SCR_W = 1920
+SCR_H = 1080
+
 class HiddenRoot(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
         #hackish way, essentially makes root window
         #as small as possible but still "focused"
         #enabling us to use the binding on <esc>
-        self.wm_geometry("1920x1080+0+0")
+        self.wm_geometry(f"{SCR_W}x{SCR_H}+0+0")
         self.attributes('-alpha', 0)
 
         self.window = MySlideShow(self)
         self.window.startSlideShow()
-        self.window.wm_geometry("1920x1080+0+0")
+        self.window.wm_geometry(f"{SCR_W}x{SCR_H}+0+0")
 
     def moveSlide(self, offset):
         self.window.moveSlide(offset)
@@ -44,11 +47,13 @@ class MySlideShow(tk.Toplevel):
         self.image = -1
 
         # Create a title label
-        self.txtTitle = self.canvas.create_text(970,1035,text="asdf", fill="white", font=('Helvetica 60 bold'), justify=tk.CENTER)
-        self.txtTitleLT = self.canvas.create_text(968,1033,text="asdf", fill="black", font=('Helvetica 60 bold'), justify=tk.CENTER)
-        self.txtTitleRT = self.canvas.create_text(972,1033,text="asdf", fill="black", font=('Helvetica 60 bold'), justify=tk.CENTER)
-        self.txtTitleLB = self.canvas.create_text(968,1037,text="asdf", fill="black", font=('Helvetica 60 bold'), justify=tk.CENTER)
-        self.txtTitleRB = self.canvas.create_text(972,1037,text="asdf", fill="black", font=('Helvetica 60 bold'), justify=tk.CENTER)
+        txtCW = SCR_W / 2
+        txtCH = SCR_H - 40
+        self.txtTitle = self.canvas.create_text(txtCW,txtCH,text="asdf", fill="white", font=('Helvetica 60 bold'), justify=tk.CENTER)
+        self.txtTitleLT = self.canvas.create_text(txtCW-2,txtCH-2,text="asdf", fill="black", font=('Helvetica 60 bold'), justify=tk.CENTER)
+        self.txtTitleRT = self.canvas.create_text(txtCW+2,txtCH-2,text="asdf", fill="black", font=('Helvetica 60 bold'), justify=tk.CENTER)
+        self.txtTitleLB = self.canvas.create_text(txtCW-2,txtCH+2,text="asdf", fill="black", font=('Helvetica 60 bold'), justify=tk.CENTER)
+        self.txtTitleRB = self.canvas.create_text(txtCW+2,txtCH+2,text="asdf", fill="black", font=('Helvetica 60 bold'), justify=tk.CENTER)
 
         self.getImages()
 
@@ -123,7 +128,7 @@ class MySlideShow(tk.Toplevel):
 
         img_w, img_h = image.size
         # scr_w, scr_h = self.winfo_screenwidth(), self.winfo_screenheight()
-        scr_w, scr_h = 1920, 1080
+        scr_w, scr_h = SCR_W, SCR_H
         wFactor = scr_w / img_w
         hFactor = scr_h / img_h
         factor = min(wFactor, hFactor)
